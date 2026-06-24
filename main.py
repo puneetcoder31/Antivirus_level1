@@ -1,10 +1,12 @@
 import os
 
-from scanner.signature_scanner import scan_file
-from scanner.heuristic_scanner import heuristic_scan
-from scanner.pe_analyzer import analyze_pe
+from scanner import scan_file
+from heuristic_scanner import heuristic_scan
+from pe_analyzer import analyze_pe
+from report_generator import write_log
+from quarantine import quarantine_file
 
-from scanner.threat_engine import (
+from threat_engine import (
     calculate_threat_score,
     get_verdict
 )
@@ -12,37 +14,39 @@ from scanner.threat_engine import (
 
 def scan_target(filepath):
 
-    print("\n")
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("Scanning :", filepath)
     print("=" * 60)
 
-    # ---------------------------------
-    # Signature Scanner
-    # ---------------------------------
-
+    # Signature Scan
     signature_result = scan_file(filepath)
 
     print("\n[1] SIGNATURE SCAN")
 
-    if signature_result:
-        print("Result : INFECTED")
+    print(
+        "Score :",
+        signature_result["score"]
+    )
+
+    if signature_result["infected"]:
+        print("Verdict : INFECTED")
     else:
-        print("Result : SAFE")
+        print("Verdict : SAFE")
 
-    # ---------------------------------
-    # Heuristic Scanner
-    # ---------------------------------
-
+    # Heuristic Scan
     heuristic_result = heuristic_scan(filepath)
 
     print("\n[2] HEURISTIC SCAN")
 
-    print("Score   :",
-          heuristic_result["score"])
+    print(
+        "Score :",
+        heuristic_result["score"]
+    )
 
-    print("Verdict :",
-          heuristic_result["verdict"])
+    print(
+        "Verdict :",
+        heuristic_result["verdict"]
+    )
 
     print("\nFindings:")
 
@@ -54,16 +58,15 @@ def scan_target(filepath):
     else:
         print("No suspicious indicators")
 
-    # ---------------------------------
     # PE Analysis
-    # ---------------------------------
-
     pe_result = analyze_pe(filepath)
 
     print("\n[3] PE ANALYSIS")
 
-    print("Score :",
-          pe_result["score"])
+    print(
+        "Score :",
+        pe_result["score"]
+    )
 
     print("\nFindings:")
 
@@ -75,10 +78,7 @@ def scan_target(filepath):
     else:
         print("No PE indicators")
 
-    # ---------------------------------
     # Threat Engine
-    # ---------------------------------
-
     final_score = calculate_threat_score(
         signature_result,
         heuristic_result["score"],
@@ -89,16 +89,76 @@ def scan_target(filepath):
         final_score
     )
 
+    # LOGGING
+    write_log(
+        os.path.basename(filepath),
+        final_verdict,
+        final_score,
+        (
+            "Heuristic="
+            + str(heuristic_result["score"])
+            + ", PE="
+            + str(pe_result["score"])
+        )
+    )
+
     print("\n[4] THREAT ENGINE")
 
-    print("Final Score   :",
-          final_score)
+    print(
+        "Final Score :",
+        final_score
+    )
 
-    print("Final Verdict :",
-          final_verdict)
+    print(
+        "Final Verdict :",
+        final_verdict
+    )
+
+        # Threat Engine
+    final_score = calculate_threat_score(
+        signature_result,
+        heuristic_result["score"],
+        pe_result["score"]
+    )
+
+    final_verdict = get_verdict(
+        final_score
+    )
+
+    # REPORT LOG
+    write_log(
+        os.path.basename(filepath),
+        final_verdict,
+        final_score,
+        (
+            "Heuristic="
+            + str(heuristic_result["score"])
+            + ", PE="
+            + str(pe_result["score"])
+        )
+    )
+
+    # QUARANTINE
+    if final_verdict in [
+        "MALICIOUS",
+        "SUSPICIOUS"
+    ]:
+
+        quarantine_file(filepath)
+
+    print("\n[4] THREAT ENGINE")
+
+    print(
+        "Final Score :",
+        final_score
+    )
+
+    print(
+        "Final Verdict :",
+        final_verdict
+    )
 
     return final_verdict
-
 
 def scan_folder(folder):
 
@@ -130,8 +190,10 @@ def scan_folder(folder):
 
     print("Total Files   :", total_files)
     print("Threats Found :", threats)
-    print("Safe Files    :",
-          total_files - threats)
+    print(
+        "Safe Files :",
+        total_files - threats
+    )
 
     print("=" * 60)
 

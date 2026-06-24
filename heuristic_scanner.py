@@ -14,8 +14,17 @@ SUSPICIOUS_KEYWORDS = {
     "pynput": 25,
     "requests": 10,
     "urllib": 10,
-    "ftp": 10
-}
+    "ftp": 10,
+    "VirtualAlloc": 20,
+"VirtualProtect": 15,
+"WriteProcessMemory": 25,
+"CreateRemoteThread": 25,
+"WinExec": 15,
+"ShellExecuteA": 15,
+"InternetOpenA": 15,
+"URLDownloadToFileA": 20,
+"GetAsyncKeyState": 25,
+"SetWindowsHookExA": 25}
 
 # Suspicious extensions
 DANGEROUS_EXTENSIONS = {

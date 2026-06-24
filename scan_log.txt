@@ -1,0 +1,11 @@
+[2026-06-24 23:48:59] | file.txt | MALICIOUS | Score=100 | Heuristic=255, PE=0
+[2026-06-24 23:48:59] | sfile.exe | SAFE | Score=20 | Heuristic=20, PE=0
+[2026-06-24 23:48:59] | test2.txt | SAFE | Score=5 | Heuristic=5, PE=0
+[2026-06-25 00:10:31] | eicar.com | SAFE | Score=5 | Heuristic=5, PE=0
+[2026-06-25 00:10:31] | eicar.com | SAFE | Score=5 | Heuristic=5, PE=0
+[2026-06-25 00:10:31] | file.txt | MALICIOUS | Score=100 | Heuristic=255, PE=0
+[2026-06-25 00:10:31] | file.txt | MALICIOUS | Score=100 | Heuristic=255, PE=0
+[2026-06-25 00:10:32] | sfile.exe | SAFE | Score=20 | Heuristic=20, PE=0
+[2026-06-25 00:10:32] | sfile.exe | SAFE | Score=20 | Heuristic=20, PE=0
+[2026-06-25 00:10:32] | test2.txt | SAFE | Score=5 | Heuristic=5, PE=0
+[2026-06-25 00:10:32] | test2.txt | SAFE | Score=5 | Heuristic=5, PE=0
